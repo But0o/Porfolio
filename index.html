@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agustín Lamendola — Desarrollo de Software Backend</title>
+<meta name="description" content="Portfolio de Agustín Lamendola, estudiante de Tecnicatura en Desarrollo de Software orientado a backend, redes y ciberseguridad.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Agustín Lamendola — Desarrollo de Software Backend">
+<meta property="og:description" content="Estudiante de Desarrollo de Software orientado a backend, con interés en redes y ciberseguridad. Python, Java, SQL, Linux.">
+<meta property="og:type" content="website">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A0E14'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' fill='%234FD8C4' text-anchor='middle'%3EAL%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0A0E14;
+    --surface:#111826;
+    --surface-alt:#161E2C;
+    --border:#232C3C;
+    --text:#E7ECF3;
+    --muted:#8A93A6;
+    --accent:#4FD8C4;
+    --accent-dim:#3AA695;
+    --warm:#F2A65A;
+    --maxw:920px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Space Grotesk', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  a{color:inherit;}
+
+  ::selection{background:var(--accent); color:#0A0E14;}
+
+  :focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.site-nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(10,14,20,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:16px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .nav-logo{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.95rem;
+    color:var(--accent);
+    text-decoration:none;
+    letter-spacing:0.02em;
+  }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color:var(--muted);
+    font-size:0.95rem;
+    transition:color 0.15s ease;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:1px solid var(--border);
+    border-radius:6px;
+    color:var(--text);
+    width:38px;
+    height:38px;
+    cursor:pointer;
+    font-size:1.1rem;
+  }
+
+  @media (max-width:640px){
+    .nav-links{
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+      background:var(--surface);
+      flex-direction:column;
+      gap:0;
+      border-bottom:1px solid var(--border);
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.25s ease;
+    }
+    .nav-links.open{max-height:280px;}
+    .nav-links a{
+      padding:14px 28px;
+      border-top:1px solid var(--border);
+      display:block;
+    }
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:96px 0 80px;
+    overflow:hidden;
+  }
+  .hero-net{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    opacity:0.55;
+    pointer-events:none;
+  }
+  .hero-content{position:relative; z-index:1;}
+  .hero-kicker{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--accent);
+    font-size:0.95rem;
+    margin:0 0 18px;
+  }
+  .hero-kicker .cursor{
+    display:inline-block;
+    width:8px;
+    height:1.05em;
+    background:var(--accent);
+    margin-left:2px;
+    vertical-align:-2px;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  h1.hero-name{
+    font-size:clamp(2.4rem, 6vw, 3.6rem);
+    line-height:1.05;
+    margin:0 0 20px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  .hero-lede{
+    max-width:56ch;
+    color:var(--muted);
+    font-size:1.15rem;
+    margin:0 0 36px;
+  }
+  .hero-lede strong{color:var(--text); font-weight:600;}
+
+  .hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:44px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 22px;
+    border-radius:8px;
+    text-decoration:none;
+    font-size:0.98rem;
+    font-weight:500;
+    border:1px solid transparent;
+    transition:transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary{
+    background:var(--accent);
+    color:#0A0E14;
+  }
+  .btn-primary:hover{background:#66E2D1;}
+  .btn-ghost{
+    border-color:var(--border);
+    color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+
+  .hero-links{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.9rem;
+    color:var(--muted);
+  }
+  .hero-links a{text-decoration:none; border-bottom:1px solid transparent;}
+  .hero-links a:hover{color:var(--accent); border-color:var(--accent);}
+
+  /* ---------- SECTIONS ---------- */
+  section{
+    padding:64px 0;
+    border-top:1px solid var(--border);
+  }
+  section h2{
+    font-size:1.7rem;
+    margin:0 0 28px;
+    font-weight:600;
+  }
+
+  /* about */
+  .about-text{
+    max-width:62ch;
+    color:var(--muted);
+    font-size:1.05rem;
+    margin-bottom:44px;
+  }
+  .about-text strong{color:var(--text); font-weight:600;}
+
+  .path{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.92rem;
+  }
+  .path-step{
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:8px 14px;
+    border-radius:999px;
+    color:var(--text);
+    white-space:nowrap;
+  }
+  .path-step.current{
+    border-color:var(--accent);
+    color:var(--accent);
+  }
+  .path-arrow{color:var(--muted);}
+
+  /* projects */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .project-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .project-card.featured{
+    border-color:var(--accent-dim);
+    background:linear-gradient(180deg, rgba(79,216,196,0.06), var(--surface) 60%);
+  }
+  .project-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .project-name{
+    font-size:1.25rem;
+    font-weight:600;
+    margin:0;
+  }
+  .project-status{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    padding:4px 10px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .project-status.active{color:var(--accent); border-color:var(--accent-dim);}
+  .project-desc{
+    color:var(--muted);
+    font-size:0.98rem;
+    margin:0;
+  }
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--text);
+    background:var(--surface-alt);
+    border:1px solid var(--border);
+    padding:4px 10px;
+    border-radius:6px;
+  }
+  .project-links{
+    display:flex;
+    gap:16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.88rem;
+    margin-top:4px;
+  }
+  .project-links a{
+    text-decoration:none;
+    color:var(--muted);
+    border-bottom:1px solid transparent;
+  }
+  .project-links a:hover{color:var(--accent); border-color:var(--accent);}
+
+  /* skills */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:28px;
+  }
+  .skill-group h3{
+    font-size:0.85rem;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--muted);
+    margin:0 0 14px;
+    font-weight:500;
+  }
+  .skill-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:0;
+    margin:0;
+    list-style:none;
+  }
+  .skill-list li{
+    font-size:0.9rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:6px 12px;
+    border-radius:6px;
+  }
+
+  /* experience */
+  .timeline{
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+  }
+  .timeline-item{
+    display:grid;
+    grid-template-columns:150px 1fr;
+    gap:20px;
+  }
+  .timeline-date{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--muted);
+    padding-top:2px;
+  }
+  .timeline-role{
+    margin:0 0 4px;
+    font-size:1.05rem;
+    font-weight:600;
+  }
+  .timeline-place{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--accent);
+    display:block;
+    margin-bottom:8px;
+  }
+  .timeline-desc{
+    color:var(--muted);
+    margin:0;
+    font-size:0.95rem;
+  }
+  @media (max-width:600px){
+    .timeline-item{grid-template-columns:1fr; gap:4px;}
+  }
+
+  /* education */
+  .edu-item{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:18px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .edu-item:last-child{border-bottom:none;}
+  .edu-title{font-weight:600; margin:0 0 4px;}
+  .edu-place{color:var(--muted); font-size:0.92rem; margin:0;}
+  .edu-date{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--muted);
+    font-size:0.88rem;
+    white-space:nowrap;
+  }
+
+  /* contact / footer */
+  footer{
+    padding:64px 0 40px;
+    border-top:1px solid var(--border);
+  }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    gap:24px;
+    margin-bottom:48px;
+  }
+  .contact-item h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--muted);
+    margin:0 0 8px;
+    font-weight:500;
+  }
+  .contact-item a, .contact-item p{
+    margin:0;
+    font-size:1rem;
+    text-decoration:none;
+    color:var(--text);
+  }
+  .contact-item a:hover{color:var(--accent);}
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.82rem;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+  }
+  .footer-bottom a{text-decoration:none; color:var(--muted);}
+  .footer-bottom a:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">agustin.lamendola()</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">Sobre mí</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#skills">Habilidades</a></li>
+      <li><a href="#experience">Experiencia</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <svg class="hero-net" viewBox="0 0 900 500" preserveAspectRatio="xMaxYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g stroke="#4FD8C4" stroke-width="1" opacity="0.35">
+        <line x1="560" y1="80" x2="700" y2="140"/>
+        <line x1="700" y1="140" x2="640" y2="260"/>
+        <line x1="640" y1="260" x2="780" y2="300"/>
+        <line x1="700" y1="140" x2="820" y2="90"/>
+        <line x1="640" y1="260" x2="560" y2="380"/>
+        <line x1="780" y1="300" x2="860" y2="220"/>
+        <line x1="560" y1="380" x2="700" y2="430"/>
+        <line x1="780" y1="300" x2="700" y2="430"/>
+      </g>
+      <g fill="#4FD8C4">
+        <circle cx="560" cy="80" r="4" opacity="0.5"/>
+        <circle cx="700" cy="140" r="5" opacity="0.8"/>
+        <circle cx="640" cy="260" r="4" opacity="0.6"/>
+        <circle cx="780" cy="300" r="5" opacity="0.8"/>
+        <circle cx="820" cy="90" r="3.5" opacity="0.4"/>
+        <circle cx="860" cy="220" r="4" opacity="0.5"/>
+        <circle cx="560" cy="380" r="3.5" opacity="0.4"/>
+        <circle cx="700" cy="430" r="4" opacity="0.5"/>
+        <circle cx="700" cy="140" r="9" fill="none" stroke="#4FD8C4" stroke-width="1" opacity="0.6">
+          <animate attributeName="r" values="6;16;6" dur="3.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.6;0;0.6" dur="3.5s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+    </svg>
+
+    <div class="wrap hero-content">
+      <p class="hero-kicker">$ whoami<span class="cursor"></span></p>
+      <h1 class="hero-name">Agustín Lamendola</h1>
+      <p class="hero-lede">
+        Estudiante de <strong>Tecnicatura en Desarrollo de Software</strong>, orientado a
+        <strong>backend</strong>, con foco creciente en <strong>redes y ciberseguridad</strong>.
+        Busco mi primera oportunidad profesional en IT.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">Ver proyectos</a>
+        <a class="btn btn-ghost" href="assets/CV-Agustin-Lamendola.pdf" target="_blank" rel="noopener">Descargar CV</a>
+      </div>
+      <div class="hero-links">
+        <a href="mailto:agustinleonardola@gmail.com">agustinleonardola@gmail.com</a>
+        <a href="https://github.com/But0o" target="_blank" rel="noopener">github.com/But0o</a>
+        <a href="https://www.linkedin.com/in/agustin-lamendola/" target="_blank" rel="noopener">linkedin.com/in/agustin-lamendola</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <h2>Sobre mí</h2>
+      <p class="about-text">
+        Estoy cursando la Tecnicatura en Desarrollo de Software en la <strong>UADE</strong>, con formación
+        práctica en programación, estructuras de datos, bases de datos, control de versiones y entornos Linux.
+        Me interesa construir sistemas backend sólidos y, a partir de ahí, seguir creciendo hacia redes e
+        infraestructura de seguridad — algo que ya empecé a explorar en mis proyectos personales. Tengo
+        disposición para aprender nuevas tecnologías y trabajar en equipo.
+      </p>
+      <div class="path">
+        <span class="path-step current">Backend</span>
+        <span class="path-arrow">→</span>
+        <span class="path-step">Linux</span>
+        <span class="path-arrow">→</span>
+        <span class="path-step">Networking</span>
+        <span class="path-arrow">→</span>
+        <span class="path-step">Infraestructura</span>
+        <span class="path-arrow">→</span>
+        <span class="path-step">Ciberseguridad</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <h2>Proyectos</h2>
+      <div class="projects-grid">
+
+        <article class="project-card featured">
+          <div class="project-top">
+            <h3 class="project-name">NetGuard</h3>
+            <span class="project-status active">En desarrollo activo</span>
+          </div>
+          <p class="project-desc">
+            Herramienta educativa de descubrimiento de red y monitoreo de seguridad, construida en Python.
+            El objetivo es explorar de forma progresiva networking, programación de sockets y conceptos de
+            ciberseguridad: descubrimiento de hosts, escaneo de puertos TCP, detección básica de servicios y,
+            más adelante, una API REST con FastAPI para exponer los datos.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Python</span>
+            <span class="tag">Sockets</span>
+            <span class="tag">Networking</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">Linux</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/But0o/NetGuard" target="_blank" rel="noopener">Repositorio →</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-top">
+            <h3 class="project-name">SkyDefence</h3>
+            <span class="project-status">Java · POO</span>
+          </div>
+          <p class="project-desc">
+            Juego de escritorio desarrollado en Java con Swing, pensado para aplicar conceptos de
+            Programación Orientada a Objetos: herencia, encapsulamiento, clases internas y separación entre
+            la lógica del juego y la interfaz gráfica.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Java</span>
+            <span class="tag">Swing</span>
+            <span class="tag">OOP</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/But0o/SkyDefence" target="_blank" rel="noopener">Repositorio →</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-top">
+            <h3 class="project-name">Pokémon Fastfetch</h3>
+            <span class="project-status">Completo</span>
+          </div>
+          <p class="project-desc">
+            Personalización de terminal para Linux que reemplaza la pantalla de inicio por un panel con
+            información de un Pokémon y un dashboard del sistema, usando el protocolo gráfico de Kitty,
+            una Pokédex local offline y renderizado cacheado con ImageMagick.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Bash</span>
+            <span class="tag">Linux</span>
+            <span class="tag">Kitty</span>
+            <span class="tag">ImageMagick</span>
+            <span class="tag">CI/CD</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/But0o/pokemon-fastfetch" target="_blank" rel="noopener">Repositorio →</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <h2>Habilidades</h2>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h3>lenguajes</h3>
+          <ul class="skill-list">
+            <li>Python</li><li>Java</li><li>Kotlin</li><li>JavaScript</li><li>PHP</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>backend &amp; datos</h3>
+          <ul class="skill-list">
+            <li>PostgreSQL</li><li>MySQL</li><li>REST APIs</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>sistemas &amp; redes</h3>
+          <ul class="skill-list">
+            <li>Linux</li><li>Bash</li><li>Cisco Packet Tracer</li><li>Windows</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>web</h3>
+          <ul class="skill-list">
+            <li>HTML</li><li>CSS</li><li>Bootstrap</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>herramientas</h3>
+          <ul class="skill-list">
+            <li>Git</li><li>GitHub</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <h2>Experiencia</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-date mono">01/2025 – 02/2026</span>
+          <div>
+            <h3 class="timeline-role">Atención al cliente en barra y salón</h3>
+            <span class="timeline-place">Service Bar-Griller · Cariló</span>
+            <p class="timeline-desc">
+              Gestión de atención en entornos de alta demanda, coordinación con distintos sectores y
+              priorización de tareas para mantener un servicio eficiente bajo presión.
+            </p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-date mono">10/2024 – 01/2025</span>
+          <div>
+            <h3 class="timeline-role">Commis de sala</h3>
+            <span class="timeline-place">Griller · Cariló</span>
+            <p class="timeline-desc">
+              Coordinación con cocina y barra para mantener un flujo de trabajo ordenado durante el servicio.
+            </p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-date mono">11/2023 – 04/2024</span>
+          <div>
+            <h3 class="timeline-role">Vendedor Digital</h3>
+            <span class="timeline-place">COTO Madariaga</span>
+            <p class="timeline-desc">
+              Atención al cliente en el sector digital, asistencia en terminales de autoservicio y
+              coordinación con logística.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <h2>Educación</h2>
+      <div class="edu-item">
+        <div>
+          <p class="edu-title">Tecnicatura en Desarrollo de Software</p>
+          <p class="edu-place">Universidad Argentina de la Empresa (UADE)</p>
+        </div>
+        <span class="edu-date">2023 – Presente</span>
+      </div>
+      <div class="edu-item">
+        <div>
+          <p class="edu-title">Bachiller en Ciencias Naturales</p>
+          <p class="edu-place">Colegio San Patricio</p>
+        </div>
+        <span class="edu-date">2017 – 2022</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Contacto</h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <h3>email</h3>
+        <a href="mailto:agustinleonardola@gmail.com">agustinleonardola@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <h3>teléfono</h3>
+        <p>+54 9 2255 43-9423</p>
+      </div>
+      <div class="contact-item">
+        <h3>ubicación</h3>
+        <p>Buenos Aires, Argentina</p>
+      </div>
+      <div class="contact-item">
+        <h3>github</h3>
+        <a href="https://github.com/But0o" target="_blank" rel="noopener">github.com/But0o</a>
+      </div>
+      <div class="contact-item">
+        <h3>linkedin</h3>
+        <a href="https://www.linkedin.com/in/agustin-lamendola/" target="_blank" rel="noopener">in/agustin-lamendola</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Agustín Lamendola</span>
+      <a href="assets/CV-Agustin-Lamendola.pdf" target="_blank" rel="noopener">Descargar CV (PDF)</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
+
+</body>
+</html>
