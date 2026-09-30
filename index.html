@@ -5,64 +5,113 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agustín Lamendola — Desarrollo de Software Backend</title>
 <meta name="description" content="Portfolio de Agustín Lamendola, estudiante de Tecnicatura en Desarrollo de Software orientado a backend, redes y ciberseguridad.">
+<meta name="theme-color" content="#FAFAF8">
 
 <!-- Open Graph -->
 <meta property="og:title" content="Agustín Lamendola — Desarrollo de Software Backend">
 <meta property="og:description" content="Estudiante de Desarrollo de Software orientado a backend, con interés en redes y ciberseguridad. Python, Java, SQL, Linux.">
 <meta property="og:type" content="website">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A0E14'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' fill='%234FD8C4' text-anchor='middle'%3EAL%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231C1B19'/%3E%3Ctext x='32' y='42' font-family='system-ui,sans-serif' font-weight='700' font-size='26' fill='%23FAFAF8' text-anchor='middle'%3EAL%3C/text%3E%3C/svg%3E">
+
+<!-- Aplica el tema antes de pintar para evitar el parpadeo -->
+<script>
+  (function(){
+    var t;
+    try{ t = localStorage.getItem('theme'); }catch(e){}
+    if(t !== 'light' && t !== 'dark'){
+      t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.dataset.theme = t;
+    document.documentElement.classList.add('js');
+  })();
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
 
 <style>
+  /* ============================================================
+     TOKENS
+     Claro: papel cálido, tipografía serif en títulos, acento terracota.
+     Oscuro: tinta, títulos en sans, acento menta, detalles "terminal".
+     ============================================================ */
   :root{
-    --bg:#0A0E14;
-    --surface:#111826;
-    --surface-alt:#161E2C;
-    --border:#232C3C;
-    --text:#E7ECF3;
-    --muted:#8A93A6;
-    --accent:#4FD8C4;
-    --accent-dim:#3AA695;
-    --warm:#F2A65A;
-    --maxw:920px;
+    --bg:#FAFAF8;
+    --surface:#FFFFFF;
+    --text:#111110;
+    --muted:#4F4D48;
+    --line:#D9D6CF;
+    --accent:#A8431C;
+    --accent-soft:rgba(168,67,28,0.08);
+    --dot:transparent;
+    --nav-bg:rgba(250,250,248,0.85);
+
+    --font-display:'Bricolage Grotesque', system-ui, sans-serif;
+    --font-body:'Geist', system-ui, sans-serif;
+    --font-mono:'Geist Mono', ui-monospace, monospace;
+
+    --maxw:760px;
+    --ease:cubic-bezier(.65,0,.35,1);
+    color-scheme:light;
+  }
+
+  :root[data-theme="dark"]{
+    --bg:#0E0F11;
+    --surface:#15171A;
+    --text:#E8E6E1;
+    --muted:#8E8C87;
+    --line:#26282C;
+    --accent:#7FD6C2;
+    --accent-soft:rgba(127,214,194,0.07);
+    --dot:rgba(232,230,225,0.06);
+    --nav-bg:rgba(14,15,17,0.8);
+    color-scheme:dark;
   }
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
 
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
-  }
-
   body{
     margin:0;
-    background:var(--bg);
+    background-color:var(--bg);
+    background-image:radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size:22px 22px;
     color:var(--text);
-    font-family:'Space Grotesk', sans-serif;
-    line-height:1.6;
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.65;
     -webkit-font-smoothing:antialiased;
   }
 
-  .mono{font-family:'IBM Plex Mono', monospace;}
-
   a{color:inherit;}
-
-  ::selection{background:var(--accent); color:#0A0E14;}
-
-  :focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:3px;
-  }
+  ::selection{background:var(--accent); color:var(--bg);}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:4px;}
 
   .wrap{
     max-width:var(--maxw);
     margin:0 auto;
-    padding:0 28px;
+    padding:0 24px;
+  }
+
+  .mono{font-family:var(--font-mono);}
+
+  /* Elementos que solo aparecen en un tema */
+  .only-dark{display:none;}
+  [data-theme="dark"] .only-dark{display:inline;}
+  [data-theme="dark"] .only-light{display:none;}
+
+  /* Transición suave de respaldo (navegadores sin View Transitions) */
+  html.theme-fade, html.theme-fade *{
+    transition:background-color .45s ease, color .45s ease, border-color .45s ease !important;
+  }
+
+  /* View Transitions: el nuevo tema se revela en círculo desde el botón */
+  ::view-transition-old(root),
+  ::view-transition-new(root){
+    animation:none;
+    mix-blend-mode:normal;
   }
 
   /* ---------- NAV ---------- */
@@ -70,28 +119,38 @@
     position:sticky;
     top:0;
     z-index:50;
-    background:rgba(10,14,20,0.85);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--border);
+    background:var(--nav-bg);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .2s ease;
   }
+  header.site-nav.scrolled{border-bottom-color:var(--line);}
   .nav-inner{
     max-width:var(--maxw);
     margin:0 auto;
-    padding:16px 28px;
+    padding:14px 24px;
     display:flex;
     align-items:center;
-    justify-content:space-between;
+    gap:20px;
   }
   .nav-logo{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.95rem;
-    color:var(--accent);
     text-decoration:none;
-    letter-spacing:0.02em;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:-0.03em;
+    line-height:1;
+    margin-right:auto;
+  }
+  [data-theme="dark"] .nav-logo{
+    font-family:var(--font-mono);
+    font-size:0.92rem;
+    color:var(--accent);
   }
   .nav-links{
     display:flex;
-    gap:28px;
+    gap:24px;
     list-style:none;
     margin:0;
     padding:0;
@@ -99,21 +158,41 @@
   .nav-links a{
     text-decoration:none;
     color:var(--muted);
-    font-size:0.95rem;
-    transition:color 0.15s ease;
+    font-size:0.92rem;
+    transition:color .15s ease;
   }
   .nav-links a:hover{color:var(--text);}
-  .nav-toggle{
-    display:none;
-    background:none;
-    border:1px solid var(--border);
-    border-radius:6px;
-    color:var(--text);
+
+  .icon-btn{
     width:38px;
     height:38px;
+    display:grid;
+    place-items:center;
+    background:none;
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--text);
     cursor:pointer;
-    font-size:1.1rem;
+    padding:0;
+    transition:border-color .2s ease, transform .2s ease;
   }
+  .icon-btn:hover{border-color:var(--text);}
+  .icon-btn:active{transform:scale(.92);}
+  .nav-toggle{display:none;}
+
+  /* Icono sol/luna que se transforma */
+  .theme-icon{width:18px; height:18px; overflow:visible;}
+  .theme-icon .core{transition:r .5s var(--ease);}
+  .theme-icon .bite{transition:cx .5s var(--ease), cy .5s var(--ease);}
+  .theme-icon .rays{
+    transform-origin:12px 12px;
+    transition:transform .5s var(--ease), opacity .3s ease;
+  }
+  [data-theme="dark"] .theme-icon .core{r:9px;}
+  [data-theme="dark"] .theme-icon .bite{cx:17px; cy:7px;}
+  [data-theme="dark"] .theme-icon .rays{transform:rotate(-90deg) scale(.4); opacity:0;}
+  :root:not([data-theme="dark"]) .theme-icon .core{r:5px;}
+  :root:not([data-theme="dark"]) .theme-icon .bite{cx:30px; cy:0px;}
 
   @media (max-width:640px){
     .nav-links{
@@ -121,335 +200,441 @@
       top:100%;
       left:0;
       right:0;
-      background:var(--surface);
+      background:var(--bg);
       flex-direction:column;
       gap:0;
-      border-bottom:1px solid var(--border);
+      border-bottom:1px solid var(--line);
       max-height:0;
       overflow:hidden;
-      transition:max-height 0.25s ease;
+      transition:max-height .3s var(--ease);
     }
-    .nav-links.open{max-height:280px;}
+    .nav-links.open{max-height:300px;}
     .nav-links a{
-      padding:14px 28px;
-      border-top:1px solid var(--border);
       display:block;
+      padding:14px 24px;
+      border-top:1px solid var(--line);
     }
-    .nav-toggle{display:block;}
+    .nav-toggle{display:grid;}
   }
 
   /* ---------- HERO ---------- */
   .hero{
     position:relative;
-    padding:96px 0 80px;
+    padding:112px 0 96px;
     overflow:hidden;
   }
   .hero-net{
     position:absolute;
     inset:0;
-    z-index:0;
-    opacity:0.55;
+    width:100%;
+    height:100%;
     pointer-events:none;
-  }
-  .hero-content{position:relative; z-index:1;}
-  .hero-kicker{
-    font-family:'IBM Plex Mono', monospace;
     color:var(--accent);
-    font-size:0.95rem;
-    margin:0 0 18px;
+    opacity:0;
+    transition:opacity .6s ease;
   }
-  .hero-kicker .cursor{
+  [data-theme="dark"] .hero-net{opacity:.45;}
+  @media (max-width:640px){ [data-theme="dark"] .hero-net{opacity:.2;} }
+  .hero-content{position:relative;}
+
+  .kicker{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    color:var(--muted);
+    letter-spacing:0.02em;
+    margin:0 0 22px;
+  }
+  [data-theme="dark"] .kicker{color:var(--accent);}
+  .cursor{
     display:inline-block;
-    width:8px;
+    width:7px;
     height:1.05em;
     background:var(--accent);
-    margin-left:2px;
+    margin-left:3px;
     vertical-align:-2px;
     animation:blink 1s steps(1) infinite;
   }
   @keyframes blink{50%{opacity:0;}}
 
   h1.hero-name{
-    font-size:clamp(2.4rem, 6vw, 3.6rem);
-    line-height:1.05;
-    margin:0 0 20px;
+    font-family:var(--font-display);
     font-weight:700;
-    letter-spacing:-0.01em;
+    font-size:clamp(2.8rem, 8.5vw, 4.8rem);
+    line-height:0.98;
+    letter-spacing:-0.045em;
+    margin:0 0 28px;
   }
+  h1.hero-name em{font-style:normal; color:var(--accent);}
+
   .hero-lede{
-    max-width:56ch;
+    max-width:54ch;
     color:var(--muted);
-    font-size:1.15rem;
-    margin:0 0 36px;
+    font-size:1.12rem;
+    margin:0 0 40px;
   }
-  .hero-lede strong{color:var(--text); font-weight:600;}
+  .hero-lede strong{color:var(--text); font-weight:500;}
 
   .hero-actions{
     display:flex;
     flex-wrap:wrap;
-    gap:14px;
-    margin-bottom:44px;
+    align-items:center;
+    gap:12px 28px;
   }
   .btn{
     display:inline-flex;
     align-items:center;
-    gap:8px;
+    gap:10px;
     padding:12px 22px;
-    border-radius:8px;
+    border-radius:999px;
     text-decoration:none;
-    font-size:0.98rem;
+    font-size:0.95rem;
     font-weight:500;
-    border:1px solid transparent;
-    transition:transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    background:var(--text);
+    color:var(--bg);
+    transition:transform .2s var(--ease), background-color .2s ease;
   }
-  .btn-primary{
+  .btn:hover{transform:translateY(-2px);}
+  .btn .arrow{transition:transform .2s var(--ease);}
+  .btn:hover .arrow{transform:translateX(3px);}
+  [data-theme="dark"] .btn{
     background:var(--accent);
-    color:#0A0E14;
+    color:#0E0F11;
+    border-radius:8px;
   }
-  .btn-primary:hover{background:#66E2D1;}
-  .btn-ghost{
-    border-color:var(--border);
-    color:var(--text);
-  }
-  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
 
-  .hero-links{
-    display:flex;
-    gap:22px;
-    flex-wrap:wrap;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.9rem;
-    color:var(--muted);
+  .link-u{
+    text-decoration:none;
+    font-size:0.95rem;
+    background:linear-gradient(currentColor, currentColor) no-repeat 0 100% / 100% 1px;
+    padding-bottom:2px;
+    transition:background-size .3s var(--ease), color .15s ease;
   }
-  .hero-links a{text-decoration:none; border-bottom:1px solid transparent;}
-  .hero-links a:hover{color:var(--accent); border-color:var(--accent);}
+  .link-u:hover{color:var(--accent); background-size:0 1px; background-position:100% 100%;}
 
   /* ---------- SECTIONS ---------- */
-  section{
-    padding:64px 0;
-    border-top:1px solid var(--border);
+  section{padding:72px 0;}
+
+  .sec-title{
+    font-family:var(--font-display);
+    font-weight:650;
+    font-size:2rem;
+    line-height:1.1;
+    letter-spacing:-0.035em;
+    margin:0 0 36px;
+    display:flex;
+    align-items:baseline;
+    gap:16px;
   }
-  section h2{
-    font-size:1.7rem;
-    margin:0 0 28px;
-    font-weight:600;
+  .sec-title::before{
+    content:attr(data-n);
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    color:var(--accent);
+    transform:translateY(-0.6em);
+  }
+  .sec-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+    align-self:center;
+    margin-left:8px;
+  }
+  [data-theme="dark"] .sec-title::before{
+    content:"// " attr(data-n);
+    transform:none;
+  }
+  [data-theme="dark"] .sec-title::after{
+    background:none;
+    border-top:1px dashed var(--line);
   }
 
   /* about */
   .about-text{
-    max-width:62ch;
+    max-width:60ch;
     color:var(--muted);
     font-size:1.05rem;
-    margin-bottom:44px;
+    margin:0 0 40px;
   }
-  .about-text strong{color:var(--text); font-weight:600;}
+  .about-text strong{color:var(--text); font-weight:500;}
 
   .path{
     display:flex;
     flex-wrap:wrap;
     align-items:center;
-    gap:10px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.92rem;
-  }
-  .path-step{
-    background:var(--surface);
-    border:1px solid var(--border);
-    padding:8px 14px;
-    border-radius:999px;
-    color:var(--text);
-    white-space:nowrap;
-  }
-  .path-step.current{
-    border-color:var(--accent);
-    color:var(--accent);
-  }
-  .path-arrow{color:var(--muted);}
-
-  /* projects */
-  .projects-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:20px;
-  }
-  .project-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:28px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-  }
-  .project-card.featured{
-    border-color:var(--accent-dim);
-    background:linear-gradient(180deg, rgba(79,216,196,0.06), var(--surface) 60%);
-  }
-  .project-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:16px;
-    flex-wrap:wrap;
-  }
-  .project-name{
-    font-size:1.25rem;
-    font-weight:600;
-    margin:0;
-  }
-  .project-status{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    padding:4px 10px;
-    border-radius:999px;
-    border:1px solid var(--border);
-    color:var(--muted);
-    white-space:nowrap;
-  }
-  .project-status.active{color:var(--accent); border-color:var(--accent-dim);}
-  .project-desc{
-    color:var(--muted);
-    font-size:0.98rem;
-    margin:0;
-  }
-  .tag-row{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  .tag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--text);
-    background:var(--surface-alt);
-    border:1px solid var(--border);
-    padding:4px 10px;
-    border-radius:6px;
-  }
-  .project-links{
-    display:flex;
-    gap:16px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.88rem;
-    margin-top:4px;
-  }
-  .project-links a{
-    text-decoration:none;
-    color:var(--muted);
-    border-bottom:1px solid transparent;
-  }
-  .project-links a:hover{color:var(--accent); border-color:var(--accent);}
-
-  /* skills */
-  .skills-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
-    gap:28px;
-  }
-  .skill-group h3{
-    font-size:0.85rem;
-    font-family:'IBM Plex Mono', monospace;
-    color:var(--muted);
-    margin:0 0 14px;
-    font-weight:500;
-  }
-  .skill-list{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
+    gap:8px 12px;
+    font-size:0.95rem;
     padding:0;
     margin:0;
     list-style:none;
   }
-  .skill-list li{
-    font-size:0.9rem;
-    background:var(--surface);
-    border:1px solid var(--border);
-    padding:6px 12px;
+  .path li{display:flex; align-items:center; gap:12px; color:var(--muted);}
+  .path li + li::before{content:"→"; color:var(--line);}
+  .path .current{
+    color:var(--text);
+    font-weight:500;
+    text-decoration:underline;
+    text-decoration-color:var(--accent);
+    text-decoration-thickness:2px;
+    text-underline-offset:5px;
+  }
+  [data-theme="dark"] .path{font-family:var(--font-mono); font-size:0.84rem;}
+  [data-theme="dark"] .path li + li::before{color:var(--muted); opacity:.5;}
+  [data-theme="dark"] .path .current{
+    color:var(--accent);
+    text-decoration:none;
+    border:1px solid var(--accent);
     border-radius:6px;
+    padding:3px 10px;
   }
 
-  /* experience */
-  .timeline{
+  /* projects */
+  .projects{
     display:flex;
     flex-direction:column;
-    gap:28px;
   }
-  .timeline-item{
+  .project{
     display:grid;
-    grid-template-columns:150px 1fr;
-    gap:20px;
+    grid-template-columns:44px 1fr;
+    gap:8px;
+    padding:28px 0;
+    border-top:1px solid var(--line);
+    transition:border-color .2s ease, background-color .2s ease;
   }
-  .timeline-date{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.85rem;
+  .project:last-child{border-bottom:1px solid var(--line);}
+  .project-idx{
+    font-family:var(--font-mono);
+    font-size:0.8rem;
     color:var(--muted);
-    padding-top:2px;
+    padding-top:6px;
   }
-  .timeline-role{
-    margin:0 0 4px;
-    font-size:1.05rem;
-    font-weight:600;
-  }
-  .timeline-place{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.85rem;
-    color:var(--accent);
-    display:block;
+  .project-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px 16px;
     margin-bottom:8px;
   }
-  .timeline-desc{
-    color:var(--muted);
+  .project-name{
+    font-family:var(--font-display);
+    font-weight:650;
+    font-size:1.4rem;
+    line-height:1.2;
+    letter-spacing:-0.03em;
     margin:0;
-    font-size:0.95rem;
   }
-  @media (max-width:600px){
-    .timeline-item{grid-template-columns:1fr; gap:4px;}
+  .project-status{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:var(--muted);
+    white-space:nowrap;
   }
+  .project-status.active{color:var(--accent);}
+  .project-status.active::before{
+    content:"";
+    display:inline-block;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--accent);
+    margin-right:8px;
+    vertical-align:1px;
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{50%{opacity:.25;}}
+  .project-desc{
+    color:var(--muted);
+    margin:0 0 14px;
+    max-width:62ch;
+  }
+  .stack{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--muted);
+    margin:0 0 14px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px 0;
+    padding:0;
+    list-style:none;
+  }
+  .stack li + li::before{content:"·"; margin:0 8px; opacity:.6;}
+  .project-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 22px;
+  }
+  .project-links .link-u{font-size:0.9rem;}
+
+  /* En oscuro los proyectos pasan a ser tarjetas */
+  [data-theme="dark"] .projects{gap:14px;}
+  [data-theme="dark"] .project,
+  [data-theme="dark"] .project:last-child{
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--surface);
+    padding:24px 24px 24px 16px;
+  }
+  [data-theme="dark"] .project:hover{border-color:color-mix(in srgb, var(--accent) 50%, var(--line));}
+  [data-theme="dark"] .project-idx::before{content:"#";}
+  [data-theme="dark"] .stack{gap:6px;}
+  [data-theme="dark"] .stack li{
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:1px 8px;
+  }
+  [data-theme="dark"] .stack li + li::before{content:none;}
+
+  /* skills */
+  .skills{
+    display:grid;
+    grid-template-columns:170px 1fr;
+    margin:0;
+  }
+  .skills dt, .skills dd{
+    padding:14px 0;
+    border-top:1px solid var(--line);
+    margin:0;
+  }
+  .skills dt{
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    color:var(--muted);
+    padding-top:17px;
+  }
+  .skills dd:last-of-type, .skills dt:last-of-type{border-bottom:1px solid var(--line);}
+  [data-theme="dark"] .skills dt,
+  [data-theme="dark"] .skills dd{border-top-style:dashed;}
+  [data-theme="dark"] .skills dt:last-of-type,
+  [data-theme="dark"] .skills dd:last-of-type{border-bottom-style:dashed;}
+
+  /* experience */
+  .timeline{display:flex; flex-direction:column; gap:36px;}
+  .timeline-item{
+    display:grid;
+    grid-template-columns:170px 1fr;
+  }
+  .timeline-date{
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    color:var(--muted);
+    padding-top:4px;
+  }
+  .timeline-role{
+    margin:0;
+    font-size:1.08rem;
+    font-weight:500;
+  }
+  .timeline-place{
+    display:block;
+    color:var(--accent);
+    font-size:0.92rem;
+    margin-bottom:8px;
+  }
+  .timeline-desc{color:var(--muted); margin:0; font-size:0.97rem;}
 
   /* education */
   .edu-item{
     display:flex;
     justify-content:space-between;
+    align-items:baseline;
     flex-wrap:wrap;
-    gap:8px;
+    gap:4px 16px;
     padding:18px 0;
-    border-bottom:1px solid var(--border);
+    border-top:1px solid var(--line);
   }
-  .edu-item:last-child{border-bottom:none;}
-  .edu-title{font-weight:600; margin:0 0 4px;}
+  .edu-item:last-child{border-bottom:1px solid var(--line);}
+  .edu-title{font-weight:500; margin:0;}
   .edu-place{color:var(--muted); font-size:0.92rem; margin:0;}
-  .edu-date{
-    font-family:'IBM Plex Mono', monospace;
-    color:var(--muted);
-    font-size:0.88rem;
-    white-space:nowrap;
+  .edu-date{font-family:var(--font-mono); font-size:0.8rem; color:var(--muted); white-space:nowrap;}
+
+  @media (max-width:600px){
+    .skills{grid-template-columns:1fr;}
+    .skills dt{border-bottom:none !important; padding-bottom:0;}
+    .skills dd{border-top:none !important; padding-top:4px;}
+    .timeline-item{grid-template-columns:1fr; gap:4px;}
+    .project{grid-template-columns:1fr; gap:2px;}
+    [data-theme="dark"] .project{padding:20px;}
   }
 
   /* contact / footer */
-  footer{
-    padding:64px 0 40px;
-    border-top:1px solid var(--border);
+  footer{padding:72px 0 40px;}
+  .contact-cta{
+    font-family:var(--font-display);
+    font-size:clamp(2rem, 6vw, 3rem);
+    line-height:1.1;
+    margin:0 0 10px;
+    font-weight:700;
+    letter-spacing:-0.04em;
   }
-  .contact-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
-    gap:24px;
-    margin-bottom:48px;
+  .contact-sub{color:var(--muted); margin:0 0 28px; font-size:1.05rem;}
+
+  .mail-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    max-width:560px;
+    padding:10px 10px 10px 20px;
+    margin-bottom:56px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    transition:border-color .2s ease;
   }
-  .contact-item h3{
-    font-family:'IBM Plex Mono', monospace;
+  .mail-card:hover{border-color:var(--accent);}
+  .mail-link{
+    flex:1;
+    min-width:0;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    font-family:var(--font-body);
+    font-size:clamp(1rem, 3.6vw, 1.2rem);
+    font-weight:500;
+    letter-spacing:0;
+    color:var(--text);
+    overflow-wrap:anywhere;
+  }
+  .mail-link svg{flex:none; color:var(--accent);}
+  .mail-link:hover{color:var(--accent);}
+  .copy-btn{
+    flex:none;
+    font-family:var(--font-mono);
     font-size:0.78rem;
     color:var(--muted);
-    margin:0 0 8px;
-    font-weight:500;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:9px 14px;
+    cursor:pointer;
+    transition:color .15s ease, border-color .15s ease;
   }
-  .contact-item a, .contact-item p{
-    margin:0;
-    font-size:1rem;
-    text-decoration:none;
-    color:var(--text);
+  .copy-btn:hover{color:var(--text); border-color:var(--text);}
+  .copy-btn.copied{color:var(--accent); border-color:var(--accent);}
+  @media (max-width:480px){
+    .mail-card{padding-left:16px; gap:8px;}
+    .mail-link{font-size:0.95rem;}
+    .mail-link svg{display:none;}
   }
+  [data-theme="dark"] .mail-card{border-radius:10px;}
+  [data-theme="dark"] .copy-btn{border-radius:6px;}
+  .contact-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
+    gap:24px;
+    margin-bottom:56px;
+  }
+  .contact-item h3{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:var(--muted);
+    margin:0 0 6px;
+    font-weight:400;
+  }
+  .contact-item a, .contact-item p{margin:0; font-size:0.95rem; text-decoration:none;}
   .contact-item a:hover{color:var(--accent);}
   .footer-bottom{
     display:flex;
@@ -457,21 +642,40 @@
     flex-wrap:wrap;
     gap:12px;
     color:var(--muted);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.82rem;
+    font-family:var(--font-mono);
+    font-size:0.78rem;
     padding-top:24px;
-    border-top:1px solid var(--border);
+    border-top:1px solid var(--line);
   }
-  .footer-bottom a{text-decoration:none; color:var(--muted);}
+  .footer-bottom a{text-decoration:none;}
   .footer-bottom a:hover{color:var(--accent);}
+
+  /* ---------- APARICIÓN AL HACER SCROLL ---------- */
+  .js .reveal{
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .7s var(--ease), transform .7s var(--ease);
+  }
+  .js .reveal.in{opacity:1; transform:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *, *::before, *::after{
+      animation-duration:0.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.001ms !important;
+    }
+    .js .reveal{opacity:1; transform:none;}
+  }
 </style>
 </head>
 <body>
 
-<header class="site-nav">
+<header class="site-nav" id="siteNav">
   <div class="nav-inner">
-    <a href="#top" class="nav-logo">agustin.lamendola()</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <a href="#top" class="nav-logo">
+      <span class="only-light">Agustín L.</span><span class="only-dark">~/agustin</span>
+    </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">Sobre mí</a></li>
       <li><a href="#projects">Proyectos</a></li>
@@ -479,6 +683,28 @@
       <li><a href="#experience">Experiencia</a></li>
       <li><a href="#contact">Contacto</a></li>
     </ul>
+    <button class="icon-btn" id="themeToggle" type="button" aria-label="Cambiar a modo oscuro">
+      <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moonMask">
+          <rect x="-4" y="-4" width="32" height="32" fill="#fff"/>
+          <circle class="bite" cx="30" cy="0" r="7" fill="#000"/>
+        </mask>
+        <circle class="core" cx="12" cy="12" r="5" fill="currentColor" mask="url(#moonMask)"/>
+        <g class="rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="12" y1="1.5" x2="12" y2="3.5"/>
+          <line x1="12" y1="20.5" x2="12" y2="22.5"/>
+          <line x1="1.5" y1="12" x2="3.5" y2="12"/>
+          <line x1="20.5" y1="12" x2="22.5" y2="12"/>
+          <line x1="4.6" y1="4.6" x2="6" y2="6"/>
+          <line x1="18" y1="18" x2="19.4" y2="19.4"/>
+          <line x1="4.6" y1="19.4" x2="6" y2="18"/>
+          <line x1="18" y1="6" x2="19.4" y2="4.6"/>
+        </g>
+      </svg>
+    </button>
+    <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" aria-expanded="false">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5h12M2 11h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
   </div>
 </header>
 
@@ -486,7 +712,7 @@
 
   <section class="hero">
     <svg class="hero-net" viewBox="0 0 900 500" preserveAspectRatio="xMaxYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g stroke="#4FD8C4" stroke-width="1" opacity="0.35">
+      <g stroke="currentColor" stroke-width="1" opacity="0.35">
         <line x1="560" y1="80" x2="700" y2="140"/>
         <line x1="700" y1="140" x2="640" y2="260"/>
         <line x1="640" y1="260" x2="780" y2="300"/>
@@ -496,16 +722,16 @@
         <line x1="560" y1="380" x2="700" y2="430"/>
         <line x1="780" y1="300" x2="700" y2="430"/>
       </g>
-      <g fill="#4FD8C4">
-        <circle cx="560" cy="80" r="4" opacity="0.5"/>
-        <circle cx="700" cy="140" r="5" opacity="0.8"/>
-        <circle cx="640" cy="260" r="4" opacity="0.6"/>
-        <circle cx="780" cy="300" r="5" opacity="0.8"/>
-        <circle cx="820" cy="90" r="3.5" opacity="0.4"/>
-        <circle cx="860" cy="220" r="4" opacity="0.5"/>
-        <circle cx="560" cy="380" r="3.5" opacity="0.4"/>
-        <circle cx="700" cy="430" r="4" opacity="0.5"/>
-        <circle cx="700" cy="140" r="9" fill="none" stroke="#4FD8C4" stroke-width="1" opacity="0.6">
+      <g fill="currentColor">
+        <circle cx="560" cy="80" r="3" opacity="0.5"/>
+        <circle cx="700" cy="140" r="4" opacity="0.8"/>
+        <circle cx="640" cy="260" r="3" opacity="0.6"/>
+        <circle cx="780" cy="300" r="4" opacity="0.8"/>
+        <circle cx="820" cy="90" r="2.5" opacity="0.4"/>
+        <circle cx="860" cy="220" r="3" opacity="0.5"/>
+        <circle cx="560" cy="380" r="2.5" opacity="0.4"/>
+        <circle cx="700" cy="430" r="3" opacity="0.5"/>
+        <circle cx="700" cy="140" r="9" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6">
           <animate attributeName="r" values="6;16;6" dur="3.5s" repeatCount="indefinite"/>
           <animate attributeName="opacity" values="0.6;0;0.6" dur="3.5s" repeatCount="indefinite"/>
         </circle>
@@ -513,28 +739,28 @@
     </svg>
 
     <div class="wrap hero-content">
-      <p class="hero-kicker">$ whoami<span class="cursor"></span></p>
-      <h1 class="hero-name">Agustín Lamendola</h1>
+      <p class="kicker">
+        <span class="only-light">Backend · Redes · Ciberseguridad</span>
+        <span class="only-dark">$ whoami<span class="cursor"></span></span>
+      </p>
+      <h1 class="hero-name">Agustín<br><em>Lamendola</em></h1>
       <p class="hero-lede">
         Estudiante de <strong>Tecnicatura en Desarrollo de Software</strong>, orientado a
         <strong>backend</strong>, con foco creciente en <strong>redes y ciberseguridad</strong>.
         Busco mi primera oportunidad profesional en IT.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#projects">Ver proyectos</a>
-        <a class="btn btn-ghost" href="assets/CV-Agustin-Lamendola.pdf" target="_blank" rel="noopener">Descargar CV</a>
-      </div>
-      <div class="hero-links">
-        <a href="mailto:agustinleonardola@gmail.com">agustinleonardola@gmail.com</a>
-        <a href="https://github.com/But0o" target="_blank" rel="noopener">github.com/But0o</a>
-        <a href="https://www.linkedin.com/in/agustin-lamendola/" target="_blank" rel="noopener">linkedin.com/in/agustin-lamendola</a>
+        <a class="btn" href="#projects">Ver proyectos <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="link-u" href="assets/CV-Agustin-Lamendola.pdf" target="_blank" rel="noopener">Descargar CV</a>
+        <a class="link-u" href="https://github.com/But0o" target="_blank" rel="noopener">GitHub</a>
+        <a class="link-u" href="https://www.linkedin.com/in/agustin-lamendola/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
   </section>
 
-  <section id="about">
+  <section id="about" class="reveal">
     <div class="wrap">
-      <h2>Sobre mí</h2>
+      <h2 class="sec-title" data-n="01">Sobre mí</h2>
       <p class="about-text">
         Estoy cursando la Tecnicatura en Desarrollo de Software en la <strong>UADE</strong>, con formación
         práctica en programación, estructuras de datos, bases de datos, control de versiones y entornos Linux.
@@ -542,113 +768,106 @@
         infraestructura de seguridad — algo que ya empecé a explorar en mis proyectos personales. Tengo
         disposición para aprender nuevas tecnologías y trabajar en equipo.
       </p>
-      <div class="path">
-        <span class="path-step current">Backend</span>
-        <span class="path-arrow">→</span>
-        <span class="path-step">Linux</span>
-        <span class="path-arrow">→</span>
-        <span class="path-step">Networking</span>
-        <span class="path-arrow">→</span>
-        <span class="path-step">Infraestructura</span>
-        <span class="path-arrow">→</span>
-        <span class="path-step">Ciberseguridad</span>
-      </div>
+      <ol class="path" aria-label="Recorrido de aprendizaje">
+        <li><span class="current">Backend</span></li>
+        <li>Linux</li>
+        <li>Networking</li>
+        <li>Infraestructura</li>
+        <li>Ciberseguridad</li>
+      </ol>
     </div>
   </section>
 
-  <section id="projects">
+  <section id="projects" class="reveal">
     <div class="wrap">
-      <h2>Proyectos</h2>
-      <div class="projects-grid">
+      <h2 class="sec-title" data-n="02">Proyectos</h2>
+      <div class="projects">
 
-        <article class="project-card featured">
-          <div class="project-top">
-            <h3 class="project-name">NetGuard</h3>
-            <span class="project-status active">En desarrollo activo</span>
-          </div>
-          <p class="project-desc">
-            Herramienta educativa de descubrimiento de red y monitoreo de seguridad, construida en Python.
-            El objetivo es explorar de forma progresiva networking, programación de sockets y conceptos de
-            ciberseguridad: descubrimiento de hosts, escaneo de puertos TCP, detección básica de servicios y,
-            más adelante, una API REST con FastAPI para exponer los datos.
-          </p>
-          <div class="tag-row">
-            <span class="tag">Python</span>
-            <span class="tag">Sockets</span>
-            <span class="tag">Networking</span>
-            <span class="tag">FastAPI</span>
-            <span class="tag">Linux</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/But0o/NetGuard" target="_blank" rel="noopener">Repositorio →</a>
+        <article class="project">
+          <span class="project-idx">01</span>
+          <div>
+            <div class="project-head">
+              <h3 class="project-name">NetGuard</h3>
+              <span class="project-status active">En desarrollo activo</span>
+            </div>
+            <p class="project-desc">
+              Herramienta educativa de descubrimiento de red y monitoreo de seguridad, construida en Python.
+              El objetivo es explorar de forma progresiva networking, programación de sockets y conceptos de
+              ciberseguridad: descubrimiento de hosts, escaneo de puertos TCP, detección básica de servicios y,
+              más adelante, una API REST con FastAPI para exponer los datos.
+            </p>
+            <ul class="stack">
+              <li>Python</li><li>Sockets</li><li>Networking</li><li>FastAPI</li><li>Linux</li>
+            </ul>
+            <div class="project-links">
+              <a class="link-u" href="https://github.com/But0o/NetGuard" target="_blank" rel="noopener">Repositorio ↗</a>
+            </div>
           </div>
         </article>
 
-        <article class="project-card">
-          <div class="project-top">
-            <h3 class="project-name">Arsenal de Tyria</h3>
-            <span class="project-status">Publicado · PWA</span>
-          </div>
-          <p class="project-desc">
-            Buscador de objetos de Guild Wars 2 con recetas, precios del bazar y datos de la cuenta del
-            jugador, instalable en PC y celular. Nació como una app Android en Kotlin y lo rehice para la web:
-            en vez de descargar el catálogo en cada dispositivo (unas 370 llamadas a la API), un workflow de
-            GitHub Actions genera todos los días un índice estático de ~74.000 objetos y la búsqueda corre
-            localmente en el navegador, incluso sin conexión.
-          </p>
-          <div class="tag-row">
-            <span class="tag">TypeScript</span>
-            <span class="tag">React</span>
-            <span class="tag">Vite</span>
-            <span class="tag">PWA</span>
-            <span class="tag">REST APIs</span>
-            <span class="tag">GitHub Actions</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/But0o/Gw2Web" target="_blank" rel="noopener">Repositorio →</a>
-            <a href="https://but0o.github.io/Gw2Web/" target="_blank" rel="noopener">Ver la app →</a>
+        <article class="project">
+          <span class="project-idx">02</span>
+          <div>
+            <div class="project-head">
+              <h3 class="project-name">Arsenal de Tyria</h3>
+              <span class="project-status">Publicado · PWA</span>
+            </div>
+            <p class="project-desc">
+              Buscador de objetos de Guild Wars 2 con recetas, precios del bazar y datos de la cuenta del
+              jugador, instalable en PC y celular. Nació como una app Android en Kotlin y lo rehice para la web:
+              en vez de descargar el catálogo en cada dispositivo (unas 370 llamadas a la API), un workflow de
+              GitHub Actions genera todos los días un índice estático de ~74.000 objetos y la búsqueda corre
+              localmente en el navegador, incluso sin conexión.
+            </p>
+            <ul class="stack">
+              <li>TypeScript</li><li>React</li><li>Vite</li><li>PWA</li><li>REST APIs</li><li>GitHub Actions</li>
+            </ul>
+            <div class="project-links">
+              <a class="link-u" href="https://github.com/But0o/Gw2Web" target="_blank" rel="noopener">Repositorio ↗</a>
+              <a class="link-u" href="https://but0o.github.io/Gw2Web/" target="_blank" rel="noopener">Ver la app ↗</a>
+            </div>
           </div>
         </article>
 
-        <article class="project-card">
-          <div class="project-top">
-            <h3 class="project-name">SkyDefence</h3>
-            <span class="project-status">Java · POO</span>
-          </div>
-          <p class="project-desc">
-            Juego de escritorio desarrollado en Java con Swing, pensado para aplicar conceptos de
-            Programación Orientada a Objetos: herencia, encapsulamiento, clases internas y separación entre
-            la lógica del juego y la interfaz gráfica.
-          </p>
-          <div class="tag-row">
-            <span class="tag">Java</span>
-            <span class="tag">Swing</span>
-            <span class="tag">OOP</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/But0o/SkyDefence" target="_blank" rel="noopener">Repositorio →</a>
+        <article class="project">
+          <span class="project-idx">03</span>
+          <div>
+            <div class="project-head">
+              <h3 class="project-name">SkyDefence</h3>
+              <span class="project-status">Java · POO</span>
+            </div>
+            <p class="project-desc">
+              Juego de escritorio desarrollado en Java con Swing, pensado para aplicar conceptos de
+              Programación Orientada a Objetos: herencia, encapsulamiento, clases internas y separación entre
+              la lógica del juego y la interfaz gráfica.
+            </p>
+            <ul class="stack">
+              <li>Java</li><li>Swing</li><li>OOP</li>
+            </ul>
+            <div class="project-links">
+              <a class="link-u" href="https://github.com/But0o/SkyDefence" target="_blank" rel="noopener">Repositorio ↗</a>
+            </div>
           </div>
         </article>
 
-        <article class="project-card">
-          <div class="project-top">
-            <h3 class="project-name">Pokémon Fastfetch</h3>
-            <span class="project-status">Completo</span>
-          </div>
-          <p class="project-desc">
-            Personalización de terminal para Linux que reemplaza la pantalla de inicio por un panel con
-            información de un Pokémon y un dashboard del sistema, usando el protocolo gráfico de Kitty,
-            una Pokédex local offline y renderizado cacheado con ImageMagick.
-          </p>
-          <div class="tag-row">
-            <span class="tag">Bash</span>
-            <span class="tag">Linux</span>
-            <span class="tag">Kitty</span>
-            <span class="tag">ImageMagick</span>
-            <span class="tag">CI/CD</span>
-          </div>
-          <div class="project-links">
-            <a href="https://github.com/But0o/pokemon-fastfetch" target="_blank" rel="noopener">Repositorio →</a>
+        <article class="project">
+          <span class="project-idx">04</span>
+          <div>
+            <div class="project-head">
+              <h3 class="project-name">Pokémon Fastfetch</h3>
+              <span class="project-status">Completo</span>
+            </div>
+            <p class="project-desc">
+              Personalización de terminal para Linux que reemplaza la pantalla de inicio por un panel con
+              información de un Pokémon y un dashboard del sistema, usando el protocolo gráfico de Kitty,
+              una Pokédex local offline y renderizado cacheado con ImageMagick.
+            </p>
+            <ul class="stack">
+              <li>Bash</li><li>Linux</li><li>Kitty</li><li>ImageMagick</li><li>CI/CD</li>
+            </ul>
+            <div class="project-links">
+              <a class="link-u" href="https://github.com/But0o/pokemon-fastfetch" target="_blank" rel="noopener">Repositorio ↗</a>
+            </div>
           </div>
         </article>
 
@@ -656,50 +875,30 @@
     </div>
   </section>
 
-  <section id="skills">
+  <section id="skills" class="reveal">
     <div class="wrap">
-      <h2>Habilidades</h2>
-      <div class="skills-grid">
-        <div class="skill-group">
-          <h3>lenguajes</h3>
-          <ul class="skill-list">
-            <li>Python</li><li>Java</li><li>Kotlin</li><li>JavaScript</li><li>PHP</li>
-          </ul>
-        </div>
-        <div class="skill-group">
-          <h3>backend &amp; datos</h3>
-          <ul class="skill-list">
-            <li>PostgreSQL</li><li>MySQL</li><li>REST APIs</li>
-          </ul>
-        </div>
-        <div class="skill-group">
-          <h3>sistemas &amp; redes</h3>
-          <ul class="skill-list">
-            <li>Linux</li><li>Bash</li><li>Cisco Packet Tracer</li><li>Windows</li>
-          </ul>
-        </div>
-        <div class="skill-group">
-          <h3>web</h3>
-          <ul class="skill-list">
-            <li>HTML</li><li>CSS</li><li>Bootstrap</li>
-          </ul>
-        </div>
-        <div class="skill-group">
-          <h3>herramientas</h3>
-          <ul class="skill-list">
-            <li>Git</li><li>GitHub</li>
-          </ul>
-        </div>
-      </div>
+      <h2 class="sec-title" data-n="03">Habilidades</h2>
+      <dl class="skills">
+        <dt>lenguajes</dt>
+        <dd>Python, Java, Kotlin, JavaScript, PHP</dd>
+        <dt>backend &amp; datos</dt>
+        <dd>PostgreSQL, MySQL, REST APIs</dd>
+        <dt>sistemas &amp; redes</dt>
+        <dd>Linux, Bash, Cisco Packet Tracer, Windows</dd>
+        <dt>web</dt>
+        <dd>HTML, CSS, Bootstrap</dd>
+        <dt>herramientas</dt>
+        <dd>Git, GitHub</dd>
+      </dl>
     </div>
   </section>
 
-  <section id="experience">
+  <section id="experience" class="reveal">
     <div class="wrap">
-      <h2>Experiencia</h2>
+      <h2 class="sec-title" data-n="04">Experiencia</h2>
       <div class="timeline">
         <div class="timeline-item">
-          <span class="timeline-date mono">01/2025 – 02/2026</span>
+          <span class="timeline-date">01/2025 – 02/2026</span>
           <div>
             <h3 class="timeline-role">Entrenador de Bartender</h3>
             <span class="timeline-place">Griller · Cariló</span>
@@ -711,7 +910,7 @@
           </div>
         </div>
         <div class="timeline-item">
-          <span class="timeline-date mono">10/2024 – 01/2025</span>
+          <span class="timeline-date">10/2024 – 01/2025</span>
           <div>
             <h3 class="timeline-role">Entrenador de Commis de sala</h3>
             <span class="timeline-place">Griller · Cariló</span>
@@ -722,7 +921,7 @@
           </div>
         </div>
         <div class="timeline-item">
-          <span class="timeline-date mono">11/2023 – 04/2024</span>
+          <span class="timeline-date">11/2023 – 04/2024</span>
           <div>
             <h3 class="timeline-role">Vendedor Digital</h3>
             <span class="timeline-place">COTO Madariaga</span>
@@ -736,9 +935,9 @@
     </div>
   </section>
 
-  <section id="education">
+  <section id="education" class="reveal">
     <div class="wrap">
-      <h2>Educación</h2>
+      <h2 class="sec-title" data-n="05">Educación</h2>
       <div class="edu-item">
         <div>
           <p class="edu-title">Tecnicatura en Desarrollo de Software</p>
@@ -758,14 +957,19 @@
 
 </main>
 
-<footer id="contact">
+<footer id="contact" class="reveal">
   <div class="wrap">
-    <h2>Contacto</h2>
+    <h2 class="sec-title" data-n="06">Contacto</h2>
+    <p class="contact-cta">¿Hablamos?</p>
+    <p class="contact-sub">Escribime por cualquier oportunidad, proyecto o consulta.</p>
+    <div class="mail-card">
+      <a class="mail-link" href="mailto:agustinleonardola@gmail.com">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        <span>agustinleonardola<wbr>@gmail.com</span>
+      </a>
+      <button class="copy-btn" id="copyMail" type="button" data-mail="agustinleonardola@gmail.com">Copiar</button>
+    </div>
     <div class="contact-grid">
-      <div class="contact-item">
-        <h3>email</h3>
-        <a href="mailto:agustinleonardola@gmail.com">agustinleonardola@gmail.com</a>
-      </div>
       <div class="contact-item">
         <h3>teléfono</h3>
         <p>+54 9 2255 43-9423</p>
@@ -793,6 +997,69 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  const root = document.documentElement;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- Tema claro / oscuro ---------- */
+  const themeToggle = document.getElementById('themeToggle');
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+
+  function applyTheme(theme){
+    root.dataset.theme = theme;
+    themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
+    themeColor.setAttribute('content', theme === 'dark' ? '#0E0F11' : '#FAFAF8');
+    try{ localStorage.setItem('theme', theme); }catch(e){}
+  }
+  applyTheme(root.dataset.theme);
+
+  themeToggle.addEventListener('click', (e) => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+
+    if(reducedMotion.matches){
+      applyTheme(next);
+      return;
+    }
+
+    // Sin View Transitions: fundido suave de colores
+    if(!document.startViewTransition){
+      root.classList.add('theme-fade');
+      applyTheme(next);
+      setTimeout(() => root.classList.remove('theme-fade'), 500);
+      return;
+    }
+
+    // Con View Transitions: el tema nuevo se expande en círculo desde el botón
+    const rect = themeToggle.getBoundingClientRect();
+    const x = e.clientX || rect.left + rect.width / 2;
+    const y = e.clientY || rect.top + rect.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    const transition = document.startViewTransition(() => applyTheme(next));
+    transition.ready.then(() => {
+      root.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 750, easing: 'cubic-bezier(.65,0,.35,1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    });
+  });
+
+  /* ---------- Copiar mail ---------- */
+  const copyMail = document.getElementById('copyMail');
+  copyMail.addEventListener('click', async () => {
+    try{
+      await navigator.clipboard.writeText(copyMail.dataset.mail);
+      copyMail.textContent = '¡Copiado!';
+      copyMail.classList.add('copied');
+    }catch(e){
+      copyMail.textContent = 'Error';
+    }
+    setTimeout(() => {
+      copyMail.textContent = 'Copiar';
+      copyMail.classList.remove('copied');
+    }, 1800);
+  });
+
+  /* ---------- Menú móvil ---------- */
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
   navToggle.addEventListener('click', () => {
@@ -805,6 +1072,28 @@
       navToggle.setAttribute('aria-expanded', 'false');
     });
   });
+
+  /* ---------- Borde de la nav al hacer scroll ---------- */
+  const siteNav = document.getElementById('siteNav');
+  const onScroll = () => siteNav.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ---------- Aparición de secciones ---------- */
+  const reveals = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+  }else{
+    reveals.forEach(el => el.classList.add('in'));
+  }
 </script>
 
 </body>
