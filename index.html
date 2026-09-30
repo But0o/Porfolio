@@ -97,11 +97,6 @@
 
   .mono{font-family:var(--font-mono);}
 
-  /* Elementos que solo aparecen en un tema */
-  .only-dark{display:none;}
-  [data-theme="dark"] .only-dark{display:inline;}
-  [data-theme="dark"] .only-light{display:none;}
-
   /* Transición suave de respaldo (navegadores sin View Transitions) */
   html.theme-fade, html.theme-fade *{
     transition:background-color .45s ease, color .45s ease, border-color .45s ease !important;
@@ -142,11 +137,6 @@
     letter-spacing:-0.03em;
     line-height:1;
     margin-right:auto;
-  }
-  [data-theme="dark"] .nav-logo{
-    font-family:var(--font-mono);
-    font-size:0.92rem;
-    color:var(--accent);
   }
   .nav-links{
     display:flex;
@@ -244,17 +234,6 @@
     letter-spacing:0.02em;
     margin:0 0 22px;
   }
-  [data-theme="dark"] .kicker{color:var(--accent);}
-  .cursor{
-    display:inline-block;
-    width:7px;
-    height:1.05em;
-    background:var(--accent);
-    margin-left:3px;
-    vertical-align:-2px;
-    animation:blink 1s steps(1) infinite;
-  }
-  @keyframes blink{50%{opacity:0;}}
 
   h1.hero-name{
     font-family:var(--font-display);
@@ -674,7 +653,7 @@
 <header class="site-nav" id="siteNav">
   <div class="nav-inner">
     <a href="#top" class="nav-logo">
-      <span class="only-light">Agustín L.</span><span class="only-dark">~/agustin</span>
+      Agustín L.
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">Sobre mí</a></li>
@@ -740,8 +719,7 @@
 
     <div class="wrap hero-content">
       <p class="kicker">
-        <span class="only-light">Backend · Redes · Ciberseguridad</span>
-        <span class="only-dark">$ whoami<span class="cursor"></span></span>
+        Backend · Redes · Ciberseguridad
       </p>
       <h1 class="hero-name">Agustín<br><em>Lamendola</em></h1>
       <p class="hero-lede">
